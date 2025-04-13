@@ -4,6 +4,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.util.List;
 
 public class XMLHandler {
     private final String filePath;
@@ -148,7 +149,6 @@ public class XMLHandler {
 
         // If the file entry does not exist, create a new one
         if (fileElement == null) {
-            System.out.println("Arquivo não encontrado, criando novo arquivo.");
             var fileEntry = new FileEntry(fileName);
             fileEntry.addDigestEntry(newDigestEntry);
             addFile(fileEntry);
@@ -167,5 +167,58 @@ public class XMLHandler {
         DOMSource source = new DOMSource(document);
         StreamResult consoleResult = new StreamResult(System.out);
         transformer.transform(source, consoleResult);
+    }
+
+    public FileEntry findFileEntry(String fileName) {
+        NodeList entries = document.getElementsByTagName("FILE_ENTRY");
+        FileEntry fileEntryEl = null;
+        for (int i = 0; i < entries.getLength(); i++) {
+            Element entry = (Element) entries.item(i);
+            Element nameElem = (Element) entry.getElementsByTagName("FILE_NAME").item(0);
+
+            if (nameElem.getTextContent().equals(fileName)) {
+                fileEntryEl = new FileEntry(entry);
+                break;
+            }
+        }
+
+        return fileEntryEl;
+    }
+
+    public List<FileEntry> getFilesEntries() {
+        NodeList digestEntries = document.getElementsByTagName("FILE_ENTRY");
+        List<FileEntry> fileEntries = new java.util.ArrayList<>();
+        for (int i = 0; i < digestEntries.getLength(); i++) {
+            Element fileEntry = (Element) digestEntries.item(i);
+            fileEntries.add(new FileEntry(fileEntry));
+        }
+        return fileEntries;
+    }
+
+    public EnumStatus getStatus(String fileName, String digestType, String digest) {
+        var fileEntry = findFileEntry(fileName);
+        var fileEntries = getFilesEntries();
+
+        var colision = fileEntries.stream()
+                .filter(f -> f.getFileName() != fileName)
+                .filter(f -> f.getDigests().stream().anyMatch(d -> d.getHex().equals(digest)))
+                .anyMatch(null);
+
+        System.out.println("colision: " + colision);
+        if (colision) {
+            return EnumStatus.COLISION;
+        } else if (fileEntry == null) {
+            return EnumStatus.NOT_FOUND;
+        } else {
+            var digestEntry = fileEntry.findDigestEntry(digestType);
+            if (digestEntry == null) {
+                return EnumStatus.NOT_FOUND;
+            } else if (digestEntry.getHex().equals(digest)) {
+                return EnumStatus.OK;
+            } else {
+                return EnumStatus.NOT_OK;
+            }
+        }
+
     }
 }

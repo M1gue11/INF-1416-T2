@@ -54,6 +54,13 @@ public class FileEntry {
         this.digestEntries = digestEntries;
     }
 
+    public DigestEntry findDigestEntry(String type) {
+        return this.digestEntries.stream()
+                .filter(d -> d.getType().equals(type))
+                .findFirst()
+                .orElse(null);
+    }
+
     public void addDigestEntry(String type, String hex) {
         DigestEntry digestEntry = new DigestEntry(type, hex);
         addDigestEntry(digestEntry);
@@ -64,7 +71,6 @@ public class FileEntry {
                 .filter(d -> d.getType().equals(digestEntry.getType()))
                 .findFirst();
 
-        System.out.println(digestType);
         if (digestType.isPresent()) {
             digestType.get().setHex(digestEntry.getHex());
         } else {
