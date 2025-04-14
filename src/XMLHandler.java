@@ -133,7 +133,7 @@ public class XMLHandler {
 
     public void addNewDigestForFile(String fileName, String type, String hex) throws Exception {
         NodeList entries = document.getElementsByTagName("FILE_ENTRY");
-        var newDigestEntry = new DigestEntry(type, hex);
+        DigestEntry newDigestEntry = new DigestEntry(type, hex);
         Element fileElement = null;
 
         // search for the file entry
@@ -149,11 +149,11 @@ public class XMLHandler {
 
         // If the file entry does not exist, create a new one
         if (fileElement == null) {
-            var fileEntry = new FileEntry(fileName);
+            FileEntry fileEntry = new FileEntry(fileName);
             fileEntry.addDigestEntry(newDigestEntry);
             addFile(fileEntry);
         } else {
-            var entryFile = new FileEntry(fileElement);
+            FileEntry entryFile = new FileEntry(fileElement);
             entryFile.addDigestEntry(newDigestEntry);
             editFile(entryFile);
         }
@@ -196,10 +196,10 @@ public class XMLHandler {
     }
 
     public EnumStatus getStatus(String fileName, String digestType, String digest) {
-        var fileEntry = findFileEntry(fileName);
-        var fileEntries = getFilesEntries();
+        FileEntry fileEntry = findFileEntry(fileName);
+        List<FileEntry> fileEntries = getFilesEntries();
 
-        var colision = fileEntries.stream()
+        boolean colision = fileEntries.stream()
                 .filter(f -> f.getFileName() != fileName)
                 .filter(f -> f.getDigests().stream().anyMatch(d -> d.getHex().equals(digest)))
                 .anyMatch(null);
@@ -210,7 +210,7 @@ public class XMLHandler {
         } else if (fileEntry == null) {
             return EnumStatus.NOT_FOUND;
         } else {
-            var digestEntry = fileEntry.findDigestEntry(digestType);
+            DigestEntry digestEntry = fileEntry.findDigestEntry(digestType);
             if (digestEntry == null) {
                 return EnumStatus.NOT_FOUND;
             } else if (digestEntry.getHex().equals(digest)) {

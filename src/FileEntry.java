@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.w3c.dom.*;
 
 public class FileEntry {
@@ -67,7 +69,7 @@ public class FileEntry {
     }
 
     public void addDigestEntry(DigestEntry digestEntry) {
-        var digestType = this.digestEntries.stream()
+        Optional<DigestEntry> digestType = this.digestEntries.stream()
                 .filter(d -> d.getType().equals(digestEntry.getType()))
                 .findFirst();
 

@@ -10,7 +10,7 @@ public class DigestCalculator {
         // return;
         // }
 
-        String tipoDigest = "sha256"; // args[0];
+        String tipoDigest = "sha-256"; // args[0];
         String caminhoPasta = "pasta_teste/"; // args[1];
         String caminhoXml = "controle.xml";// args[2];
 
@@ -29,8 +29,8 @@ public class DigestCalculator {
                         try {
                             String digest = DigestFile.digest(path.toFile(), tipoDigest);
                             String fileName = path.getFileName().toString();
-
-                            EnumStatus status = xmlHandler.getStatus(fileName, tipoDigest, digest);
+                            EnumStatus status = EnumStatus.OK;
+                            //EnumStatus status = xmlHandler.getStatus(fileName, tipoDigest, digest);
                             System.out.println(String.format(
                                     "%s %s %s (%s)", fileName, tipoDigest, digest, status.toString()));
 
