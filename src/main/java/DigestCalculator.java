@@ -1,18 +1,17 @@
+package main.java;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class DigestCalculator {
     public static void main(String[] args) {
-        // if (args.length != 3) {
-        // System.out.println(
-        // "Uso: java DigestCalculator <Tipo_Digest> <Caminho_da_Pasta_dos_Arquivos>
-        // <Caminho_ArqListaDigest>");
-        // return;
-        // }
-
-        String tipoDigest = "md5"; // args[0];
-        String caminhoPasta = "pasta_teste/"; // args[1];
-        String caminhoXml = "controle.xml";// args[2];
+        if (args.length < 3) {
+            System.out.println("Uso: java DigestCalculator <tipoDigest> <caminhoPasta> <caminhoXml>");
+            return;
+        }
+        String tipoDigest = args[0];
+        String caminhoPasta = args[1];
+        String caminhoXml = args[2];
 
         final XMLHandler xmlHandler;
         try {
