@@ -28,7 +28,7 @@ public class DigestCalculator {
                         try {
                             String digest = DigestFile.digest(path.toFile(), tipoDigest);
                             String fileName = path.getFileName().toString();
-                            //EnumStatus status = EnumStatus.OK;
+
                             EnumStatus status = xmlHandler.getStatus(fileName, tipoDigest, digest);
                             System.out.println(String.format(
                                     "%s %s %s (%s)", fileName, tipoDigest, digest, status.toString()));

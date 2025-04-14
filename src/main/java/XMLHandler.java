@@ -202,12 +202,11 @@ public class XMLHandler {
         List<FileEntry> fileEntries = getFilesEntries();
 
         boolean colision = fileEntries.stream()
-        .filter(f -> !f.getFileName().equals(fileName))
-        .filter(f -> f.getDigests().stream().anyMatch(d -> d.getHex().equals(digest)))
-        .findAny()
-        .isPresent();
+                .filter(f -> !f.getFileName().equals(fileName))
+                .filter(f -> f.getDigests().stream().anyMatch(d -> d.getHex().equals(digest)))
+                .findAny()
+                .isPresent();
 
-        System.out.println("colision: " + colision);
         if (colision) {
             return EnumStatus.COLISION;
         } else if (fileEntry == null) {
