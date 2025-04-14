@@ -1,3 +1,4 @@
+package main.java;
 public enum EnumStatus {
     OK("Status do arquivo cujo digest calculado é igual ao digest fornecido no arquivo ArqListaDigest e não colide com o digest de outro arquivo na pasta."),
     NOT_OK("Status do arquivo cujo digest não é igual ao digest fornecido no arquivo ArqListaDigest e não colide com o digest de outro arquivo na pasta."),
