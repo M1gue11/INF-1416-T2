@@ -34,7 +34,6 @@ public class DigestCalculator {
                                     "%s %s %s (%s)", fileName, tipoDigest, digest, status.toString()));
 
                             if (status == EnumStatus.NOT_FOUND) {
-                                System.out.println("Arquivo não encontrado no XML, adicionando...");
                                 xmlHandler.addNewDigestForFile(fileName, tipoDigest, digest);
                             }
                         } catch (Exception e) {
